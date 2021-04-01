@@ -5,29 +5,36 @@ using UnityEngine;
 public class movingBlock : MonoBehaviour
 {
     public float speed;
-    public float leftWall;
-    public float rightWall;
     public Vector3 startPos;
+    public Vector3 endPos;
     // Start is called before the first frame update
     IEnumerator Start()
     {
         speed = 8;
-        leftWall = transform.position.x;
-        rightWall = leftWall+10;
         startPos = transform.position;
-        return null;
+        endPos = startPos + new Vector3(0, 0, -7);
+        
+        while (true) {
+            yield return StartCoroutine(move(startPos, endPos, 2));
+            yield return StartCoroutine(move(endPos, startPos, 2));
+        }
     }
 
     // Update is called once per frame
-    IEnumerator Update()
+    void Update()
     {
         // transform.Translate(speed*Time.deltaTime*Vector3.right);
-        yield return StartCoroutine("goRight");
+        // yield return StartCoroutine("goRight");
     }
 
-    IEnumerator goRight()
+    IEnumerator move(Vector3 startPosVar, Vector3 endPosVar, float time)
     {
-        transform.position = Vector3.Lerp(startPos, startPos + 10*(Vector3.right), 2);
-        return null;
+        float i = 0.0f;
+        float rate = (1.0f/time);
+        while (i < 1) {
+            transform.position = Vector3.Lerp(startPosVar, endPosVar, i);
+            i+=rate*Time.deltaTime;
+            yield return null;
+        }
     }
 }
